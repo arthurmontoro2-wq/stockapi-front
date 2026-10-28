@@ -10,7 +10,7 @@ export default function ClientesPage() {
   useEffect(() => {
     async function carregar() {
       try {
-        const res = await fetch('https://stock.dev.vilhena.ifro.edu.br/api/clientes');
+        const res = await fetch('/api/clientes');
         const dados = await res.json();
         setClientes(Array.isArray(dados) ? dados : []);
       } catch (err) {

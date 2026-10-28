@@ -12,8 +12,8 @@ export default function ProdutosPage() {
     async function carregar() {
       try {
         const [resProdutos, resCategorias] = await Promise.all([
-          fetch('https://stock.dev.vilhena.ifro.edu.br/api/produtos'),
-          fetch('https://stock.dev.vilhena.ifro.edu.br/api/categorias')
+          fetch('/api/produtos'),
+          fetch('/api/categorias')
         ]);
 
         const dadosProdutos = await resProdutos.json();
@@ -33,7 +33,7 @@ export default function ProdutosPage() {
   }, []);
 
   function getCategoria(id) {
-    const cat = categorias.find((c) => c.id === id);
+    const cat = categorias.find((c) => Number(c.id) === Number(id));
     return cat ? cat.nome : '-';
   }
 

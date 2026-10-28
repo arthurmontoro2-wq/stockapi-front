@@ -224,9 +224,19 @@ table tr:hover {
   color: #b45309;
 }
 
+.badge-enviado {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+}
+
 .badge-concluido {
   background-color: #dcfce7;
   color: #15803d;
+}
+
+.badge-cancelado {
+  background-color: #fee2e2;
+  color: #b91c1c;
 }
 
 .alert-sucesso {

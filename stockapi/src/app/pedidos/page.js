@@ -17,10 +17,10 @@ export default function PedidosPage() {
 
     try {
       const [resPedidos, resClientes, resProdutos, resItens] = await Promise.all([
-        fetch('https://stock.dev.vilhena.ifro.edu.br/api/pedidos'),
-        fetch('https://stock.dev.vilhena.ifro.edu.br/api/clientes'),
-        fetch('https://stock.dev.vilhena.ifro.edu.br/api/produtos'),
-        fetch('https://stock.dev.vilhena.ifro.edu.br/api/itens_pedido')
+        fetch('/api/pedidos'),
+        fetch('/api/clientes'),
+        fetch('/api/produtos'),
+        fetch('/api/itens_pedido')
       ]);
 
       const dadosPedidos = await resPedidos.json();
@@ -45,12 +45,12 @@ export default function PedidosPage() {
   }, []);
 
   function getCliente(clienteId) {
-    const c = clientes.find((item) => item.id === clienteId);
+    const c = clientes.find((item) => Number(item.id) === Number(clienteId));
     return c ? c.nome : `Cliente #${clienteId}`;
   }
 
   function getProduto(produtoId) {
-    const p = produtos.find((item) => item.id === produtoId);
+    const p = produtos.find((item) => Number(item.id) === Number(produtoId));
     return p ? p.nome : `Produto #${produtoId}`;
   }
 
@@ -66,6 +66,9 @@ export default function PedidosPage() {
     const data = new Date(dataStr);
     return data.toLocaleDateString('pt-BR') + ' ' + data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
   }
+
+  // Ordena os pedidos do mais recente para o mais antigo (maior ID primeiro)
+  const pedidosOrdenados = [...pedidos].sort((a, b) => Number(b.id) - Number(a.id));
 
   return (
     <div>
@@ -91,15 +94,15 @@ export default function PedidosPage() {
         </div>
       )}
 
-      {!carregando && !erro && pedidos.length === 0 && (
+      {!carregando && !erro && pedidosOrdenados.length === 0 && (
         <div className="card">
           <p>Nenhum pedido cadastrado.</p>
         </div>
       )}
 
-      {!carregando && !erro && pedidos.map((pedido) => {
+      {!carregando && !erro && pedidosOrdenados.map((pedido) => {
         const itensDoPedido = itens.filter(
-          (item) => item.pedido_numero === pedido.id || item.pedido_id === pedido.id
+          (item) => Number(item.pedido_numero) === Number(pedido.id) || Number(item.pedido_id) === Number(pedido.id)
         );
 
         const totalPedido = itensDoPedido.reduce((soma, item) => {

@@ -24,8 +24,8 @@ export default function CriarPedidoPage() {
     async function carregarDados() {
       try {
         const [resClientes, resProdutos] = await Promise.all([
-          fetch('https://stock.dev.vilhena.ifro.edu.br/api/clientes'),
-          fetch('https://stock.dev.vilhena.ifro.edu.br/api/produtos')
+          fetch('/api/clientes'),
+          fetch('/api/produtos')
         ]);
 
         const dadosClientes = await resClientes.json();
@@ -103,14 +103,15 @@ export default function CriarPedidoPage() {
     }
 
     if (itensDoPedido.length === 0) {
-      setMensagemErro('Adicione pelo menos um item.');
+      setMensagemErro('Adicione pelo menos um produto ao pedido.');
       return;
     }
 
     setSalvando(true);
 
     try {
-      const resPedido = await fetch('https://stock.dev.vilhena.ifro.edu.br/api/pedidos', {
+      // 1. Cria o pedido na API (POST /api/pedidos)
+      const resPedido = await fetch('/api/pedidos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -119,33 +120,41 @@ export default function CriarPedidoPage() {
         })
       });
 
+      const pedidoCriado = await resPedido.json().catch(() => ({}));
+
       if (!resPedido.ok) {
-        throw new Error('Erro ao criar pedido.');
+        const msg = pedidoCriado.erro || (pedidoCriado.erros && pedidoCriado.erros.join(', ')) || 'Erro ao criar pedido na API.';
+        throw new Error(msg);
       }
 
-      const pedidoCriado = await resPedido.json();
-
+      // 2. Adiciona cada item do pedido na API (POST /api/itens_pedido)
       for (const item of itensDoPedido) {
-        await fetch('https://stock.dev.vilhena.ifro.edu.br/api/itens_pedido', {
+        const resItem = await fetch('/api/itens_pedido', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            pedido_id: pedidoCriado.id,
-            produto_id: item.produto_id,
-            quantidade: item.quantidade,
-            preco_unitario: item.preco_unitario
+            pedido_id: Number(pedidoCriado.id),
+            produto_id: Number(item.produto_id),
+            quantidade: Number(item.quantidade),
+            preco_unitario: Number(item.preco_unitario)
           })
         });
+
+        if (!resItem.ok) {
+          const itemErro = await resItem.json().catch(() => ({}));
+          const msg = itemErro.erro || (itemErro.erros && itemErro.erros.join(', ')) || 'Erro ao vincular item ao pedido.';
+          throw new Error(msg);
+        }
       }
 
-      setMensagemSucesso(`Pedido #${pedidoCriado.id} criado com sucesso!`);
+      setMensagemSucesso(`Pedido #${pedidoCriado.id} criado com sucesso! Redirecionando...`);
 
       setTimeout(() => {
         router.push('/pedidos');
-      }, 1200);
+      }, 1500);
     } catch (err) {
-      console.error(err);
-      setMensagemErro('Erro ao salvar pedido.');
+      console.error('Erro ao salvar pedido:', err);
+      setMensagemErro(err.message || 'Erro ao salvar pedido.');
     } finally {
       setSalvando(false);
     }

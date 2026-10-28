@@ -10,7 +10,7 @@ export default function CategoriasPage() {
   useEffect(() => {
     async function carregar() {
       try {
-        const res = await fetch('https://stock.dev.vilhena.ifro.edu.br/api/categorias');
+        const res = await fetch('/api/categorias');
         const dados = await res.json();
         setCategorias(Array.isArray(dados) ? dados : []);
       } catch (err) {

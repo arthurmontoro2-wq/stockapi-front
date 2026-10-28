@@ -10,7 +10,7 @@ export default function Home() {
         </p>
 
         <div style={{ marginTop: '16px', padding: '12px', background: '#f1f5f9', borderRadius: '6px' }}>
-          <p><strong>Aluno:</strong> Arthur Montoro</p>
+          <p><strong>Integrantes da Dupla:</strong> Arthur Montoro</p>
         </div>
       </div>
 

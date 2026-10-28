@@ -1,7 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
-  reactCompiler: true,
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'https://stock.dev.vilhena.ifro.edu.br/api/:path*',
+      },
+    ];
+  },
 };
 
 export default nextConfig;
