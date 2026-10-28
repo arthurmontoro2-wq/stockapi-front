@@ -110,7 +110,6 @@ export default function CriarPedidoPage() {
     setSalvando(true);
 
     try {
-      // 1. Cria o pedido na API (POST /api/pedidos)
       const resPedido = await fetch('/api/pedidos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -127,7 +126,6 @@ export default function CriarPedidoPage() {
         throw new Error(msg);
       }
 
-      // 2. Adiciona cada item do pedido na API (POST /api/itens_pedido)
       for (const item of itensDoPedido) {
         const resItem = await fetch('/api/itens_pedido', {
           method: 'POST',
@@ -168,7 +166,7 @@ export default function CriarPedidoPage() {
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <h2>Novo Pedido</h2>
+        <h2>Formulário de Novo Pedido</h2>
         <Link href="/pedidos" className="btn btn-secondary">
           Voltar
         </Link>
@@ -184,7 +182,7 @@ export default function CriarPedidoPage() {
       ) : (
         <div>
           <div className="card">
-            <h3>Cliente</h3>
+            <h3>Seleção de Cliente</h3>
             <div className="form-group">
               <label htmlFor="cliente">Selecione o Cliente</label>
               <select
@@ -204,7 +202,7 @@ export default function CriarPedidoPage() {
           </div>
 
           <div className="card">
-            <h3>Adicionar Produtos</h3>
+            <h3>Inclusão de Produtos</h3>
             <div className="form-row">
               <div className="form-group" style={{ flex: 2 }}>
                 <label htmlFor="produto">Produto</label>
@@ -248,7 +246,7 @@ export default function CriarPedidoPage() {
             </div>
 
             <div style={{ marginTop: '20px' }}>
-              <h4>Itens do Pedido ({itensDoPedido.length}):</h4>
+              <h4>Tabela de Itens do Pedido ({itensDoPedido.length}):</h4>
 
               {itensDoPedido.length === 0 ? (
                 <p style={{ color: '#64748b', marginTop: '8px' }}>
@@ -288,7 +286,7 @@ export default function CriarPedidoPage() {
                   </table>
 
                   <div style={{ textAlign: 'right', marginTop: '15px', fontSize: '1.1rem', fontWeight: 'bold' }}>
-                    Total: R$ {totalGeral.toFixed(2)}
+                    Total do Pedido: R$ {totalGeral.toFixed(2)}
                   </div>
                 </div>
               )}

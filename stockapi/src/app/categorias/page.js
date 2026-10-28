@@ -26,7 +26,7 @@ export default function CategoriasPage() {
 
   return (
     <div className="card">
-      <h2>Categorias</h2>
+      <h2>Tabela de Categorias</h2>
 
       {carregando && <p>Carregando...</p>}
       {erro && <div className="alert-erro">{erro}</div>}

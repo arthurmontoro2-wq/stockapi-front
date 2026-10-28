@@ -67,13 +67,12 @@ export default function PedidosPage() {
     return data.toLocaleDateString('pt-BR') + ' ' + data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
   }
 
-  // Ordena os pedidos do mais recente para o mais antigo (maior ID primeiro)
   const pedidosOrdenados = [...pedidos].sort((a, b) => Number(b.id) - Number(a.id));
 
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '10px' }}>
-        <h2>Pedidos</h2>
+        <h2>Lista de Pedidos</h2>
         <Link href="/criar-pedido" className="btn btn-primary">
           Novo Pedido
         </Link>
@@ -126,7 +125,7 @@ export default function PedidosPage() {
             </div>
 
             <div className="itens-lista">
-              <h4>Itens do Pedido:</h4>
+              <h4>Tabela de Itens do Pedido:</h4>
               {itensDoPedido.length === 0 ? (
                 <p style={{ color: '#64748b', fontSize: '0.9rem' }}>Nenhum item cadastrado.</p>
               ) : (
@@ -155,7 +154,7 @@ export default function PedidosPage() {
                     </tbody>
                   </table>
                   <div style={{ textAlign: 'right', marginTop: '10px', fontWeight: 'bold' }}>
-                    Total: {formatarMoeda(totalPedido)}
+                    Total do Pedido: {formatarMoeda(totalPedido)}
                   </div>
                 </div>
               )}

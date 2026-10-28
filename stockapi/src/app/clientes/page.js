@@ -26,7 +26,7 @@ export default function ClientesPage() {
 
   return (
     <div className="card">
-      <h2>Clientes</h2>
+      <h2>Tabela de Clientes</h2>
 
       {carregando && <p>Carregando...</p>}
       {erro && <div className="alert-erro">{erro}</div>}

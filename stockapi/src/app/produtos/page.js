@@ -39,7 +39,7 @@ export default function ProdutosPage() {
 
   return (
     <div className="card">
-      <h2>Produtos</h2>
+      <h2>Tabela de Produtos</h2>
 
       {carregando && <p>Carregando...</p>}
       {erro && <div className="alert-erro">{erro}</div>}
