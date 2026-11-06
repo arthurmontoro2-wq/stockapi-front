@@ -44,7 +44,11 @@ export default function ProdutosPage() {
       {carregando && <p>Carregando...</p>}
       {erro && <div className="alert-erro">{erro}</div>}
 
-      {!carregando && !erro && (
+      {!carregando && !erro && produtos.length === 0 && (
+        <p style={{ color: '#64748b' }}>Nenhum produto encontrado.</p>
+      )}
+
+      {!carregando && !erro && produtos.length > 0 && (
         <div className="table-responsive">
           <table>
             <thead>

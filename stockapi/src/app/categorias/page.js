@@ -31,7 +31,11 @@ export default function CategoriasPage() {
       {carregando && <p>Carregando...</p>}
       {erro && <div className="alert-erro">{erro}</div>}
 
-      {!carregando && !erro && (
+      {!carregando && !erro && categorias.length === 0 && (
+        <p style={{ color: '#64748b' }}>Nenhuma categoria encontrada.</p>
+      )}
+
+      {!carregando && !erro && categorias.length > 0 && (
         <div className="table-responsive">
           <table>
             <thead>

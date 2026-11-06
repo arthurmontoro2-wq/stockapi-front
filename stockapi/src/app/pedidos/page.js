@@ -10,39 +10,51 @@ export default function PedidosPage() {
   const [itens, setItens] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState(null);
-
-  async function carregarDados() {
-    setCarregando(true);
-    setErro(null);
-
-    try {
-      const [resPedidos, resClientes, resProdutos, resItens] = await Promise.all([
-        fetch('/api/pedidos'),
-        fetch('/api/clientes'),
-        fetch('/api/produtos'),
-        fetch('/api/itens_pedido')
-      ]);
-
-      const dadosPedidos = await resPedidos.json();
-      const dadosClientes = await resClientes.json();
-      const dadosProdutos = await resProdutos.json();
-      const dadosItens = await resItens.json();
-
-      setPedidos(Array.isArray(dadosPedidos) ? dadosPedidos : []);
-      setClientes(Array.isArray(dadosClientes) ? dadosClientes : []);
-      setProdutos(Array.isArray(dadosProdutos) ? dadosProdutos : []);
-      setItens(Array.isArray(dadosItens) ? dadosItens : []);
-    } catch (err) {
-      console.error(err);
-      setErro('Erro ao carregar pedidos.');
-    } finally {
-      setCarregando(false);
-    }
-  }
+  const [tentativa, setTentativa] = useState(0);
 
   useEffect(() => {
-    carregarDados();
-  }, []);
+    let ativo = true;
+
+    async function carregar() {
+      try {
+        const [resPedidos, resClientes, resProdutos, resItens] = await Promise.all([
+          fetch('/api/pedidos'),
+          fetch('/api/clientes'),
+          fetch('/api/produtos'),
+          fetch('/api/itens_pedido')
+        ]);
+
+        const dadosPedidos = await resPedidos.json();
+        const dadosClientes = await resClientes.json();
+        const dadosProdutos = await resProdutos.json();
+        const dadosItens = await resItens.json();
+
+        if (ativo) {
+          setPedidos(Array.isArray(dadosPedidos) ? dadosPedidos : []);
+          setClientes(Array.isArray(dadosClientes) ? dadosClientes : []);
+          setProdutos(Array.isArray(dadosProdutos) ? dadosProdutos : []);
+          setItens(Array.isArray(dadosItens) ? dadosItens : []);
+        }
+      } catch (err) {
+        console.error(err);
+        if (ativo) setErro('Erro ao carregar pedidos.');
+      } finally {
+        if (ativo) setCarregando(false);
+      }
+    }
+
+    carregar();
+
+    return () => {
+      ativo = false;
+    };
+  }, [tentativa]);
+
+  function recarregar() {
+    setCarregando(true);
+    setErro(null);
+    setTentativa((prev) => prev + 1);
+  }
 
   function getCliente(clienteId) {
     const c = clientes.find((item) => Number(item.id) === Number(clienteId));
@@ -87,7 +99,11 @@ export default function PedidosPage() {
       {erro && (
         <div className="alert-erro">
           <p>{erro}</p>
-          <button onClick={carregarDados} className="btn btn-secondary" style={{ marginTop: '10px' }}>
+          <button
+            onClick={recarregar}
+            className="btn btn-secondary"
+            style={{ marginTop: '10px' }}
+          >
             Recarregar
           </button>
         </div>

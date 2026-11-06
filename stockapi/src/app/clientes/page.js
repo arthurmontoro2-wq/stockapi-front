@@ -31,7 +31,11 @@ export default function ClientesPage() {
       {carregando && <p>Carregando...</p>}
       {erro && <div className="alert-erro">{erro}</div>}
 
-      {!carregando && !erro && (
+      {!carregando && !erro && clientes.length === 0 && (
+        <p style={{ color: '#64748b' }}>Nenhum cliente encontrado.</p>
+      )}
+
+      {!carregando && !erro && clientes.length > 0 && (
         <div className="table-responsive">
           <table>
             <thead>

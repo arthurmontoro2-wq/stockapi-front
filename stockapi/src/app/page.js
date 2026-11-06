@@ -9,8 +9,10 @@ export default function Home() {
           Atividade de Desenvolvimento Front-End - 4º Bimestre
         </p>
 
-        <div style={{ marginTop: '16px', padding: '12px', background: '#f1f5f9', borderRadius: '6px' }}>
-          <p><strong>Feito por:</strong> Arthur Montoro - <i>The Best</i></p>
+        <div style={{ marginTop: '16px', padding: '14px 16px', background: '#f1f5f9', borderRadius: '6px', borderLeft: '4px solid #2563eb' }}>
+          <p style={{ margin: 0, fontSize: '1rem', color: '#1e293b' }}>
+            <strong>Integrantes da Dupla:</strong> Arthur Montoro
+          </p>
         </div>
       </div>
 

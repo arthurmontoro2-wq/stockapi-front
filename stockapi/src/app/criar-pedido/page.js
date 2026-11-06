@@ -62,17 +62,31 @@ export default function CriarPedidoPage() {
     const produto = produtos.find((p) => p.id === Number(produtoId));
     if (!produto) return;
 
+    if (produto.quantidade_estoque !== undefined && produto.quantidade_estoque <= 0) {
+      setMensagemErro('Este produto está sem estoque disponível.');
+      return;
+    }
+
     const itemExistente = itensDoPedido.find((item) => item.produto_id === produto.id);
 
     if (itemExistente) {
+      const novaQtd = itemExistente.quantidade + qtd;
+      if (produto.quantidade_estoque !== undefined && novaQtd > produto.quantidade_estoque) {
+        setMensagemErro(`Quantidade total (${novaQtd}) ultrapassa o estoque disponível (${produto.quantidade_estoque}).`);
+        return;
+      }
       setItensDoPedido(
         itensDoPedido.map((item) =>
           item.produto_id === produto.id
-            ? { ...item, quantidade: item.quantidade + qtd }
+            ? { ...item, quantidade: novaQtd }
             : item
         )
       );
     } else {
+      if (produto.quantidade_estoque !== undefined && qtd > produto.quantidade_estoque) {
+        setMensagemErro(`Quantidade informada (${qtd}) ultrapassa o estoque disponível (${produto.quantidade_estoque}).`);
+        return;
+      }
       setItensDoPedido([
         ...itensDoPedido,
         {
@@ -132,6 +146,7 @@ export default function CriarPedidoPage() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             pedido_id: Number(pedidoCriado.id),
+            pedido_numero: Number(pedidoCriado.id),
             produto_id: Number(item.produto_id),
             quantidade: Number(item.quantidade),
             preco_unitario: Number(item.preco_unitario)
@@ -165,10 +180,10 @@ export default function CriarPedidoPage() {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '10px' }}>
         <h2>Formulário de Novo Pedido</h2>
         <Link href="/pedidos" className="btn btn-secondary">
-          Voltar
+          Voltar para Pedidos
         </Link>
       </div>
 
@@ -230,6 +245,12 @@ export default function CriarPedidoPage() {
                   className="form-control"
                   value={quantidade}
                   onChange={(e) => setQuantidade(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      handleAdicionarProduto(e);
+                    }
+                  }}
                 />
               </div>
 
