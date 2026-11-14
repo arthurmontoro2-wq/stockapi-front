@@ -18,10 +18,10 @@ export default function PedidosPage() {
     async function carregar() {
       try {
         const [resPedidos, resClientes, resProdutos, resItens] = await Promise.all([
-          fetch('/api/pedidos'),
-          fetch('/api/clientes'),
-          fetch('/api/produtos'),
-          fetch('/api/itens_pedido')
+          fetch('https://stock.dev.vilhena.ifro.edu.br/api/pedidos'),
+          fetch('https://stock.dev.vilhena.ifro.edu.br/api/clientes'),
+          fetch('https://stock.dev.vilhena.ifro.edu.br/api/produtos'),
+          fetch('https://stock.dev.vilhena.ifro.edu.br/api/itens_pedido')
         ]);
 
         const dadosPedidos = await resPedidos.json();

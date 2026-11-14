@@ -24,8 +24,8 @@ export default function CriarPedidoPage() {
     async function carregarDados() {
       try {
         const [resClientes, resProdutos] = await Promise.all([
-          fetch('/api/clientes'),
-          fetch('/api/produtos')
+          fetch('https://stock.dev.vilhena.ifro.edu.br/api/clientes'),
+          fetch('https://stock.dev.vilhena.ifro.edu.br/api/produtos')
         ]);
 
         const dadosClientes = await resClientes.json();
@@ -124,7 +124,7 @@ export default function CriarPedidoPage() {
     setSalvando(true);
 
     try {
-      const resPedido = await fetch('/api/pedidos', {
+      const resPedido = await fetch('https://stock.dev.vilhena.ifro.edu.br/api/pedidos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -141,7 +141,7 @@ export default function CriarPedidoPage() {
       }
 
       for (const item of itensDoPedido) {
-        const resItem = await fetch('/api/itens_pedido', {
+        const resItem = await fetch('https://stock.dev.vilhena.ifro.edu.br/api/itens_pedido', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

@@ -12,8 +12,8 @@ export default function ProdutosPage() {
     async function carregar() {
       try {
         const [resProdutos, resCategorias] = await Promise.all([
-          fetch('/api/produtos'),
-          fetch('/api/categorias')
+          fetch('https://stock.dev.vilhena.ifro.edu.br/api/produtos'),
+          fetch('https://stock.dev.vilhena.ifro.edu.br/api/categorias')
         ]);
 
         const dadosProdutos = await resProdutos.json();
